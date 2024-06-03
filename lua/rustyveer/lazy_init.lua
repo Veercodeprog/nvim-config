@@ -1,19 +1,26 @@
--- - This file can be loaded by calling `lua require('plugins')` from your init.vim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not  vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+require("lazy").setup("rustyveer.lazy")
 
-return require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
+--[[
+require("lazy").setup({
 
-  use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
+
+	  "folke/tokyonight.nvim",
+	  "nvim-lua/plenary.nvim",
+	"nvim-telescope/telescope.nvim",
 	  -- or                            , branch = '0.1.x',
-	  requires = { {'nvim-lua/plenary.nvim'} }
-  }
-
-use (
 
 	{
       "folke/trouble.nvim",
@@ -22,11 +29,15 @@ use (
       icons = false,
 			}
 	end
-  }
-)
-  use ('nvim-treesitter/nvim-treesitter',{run = ':TSUpdate'})
-  use ('nvim-treesitter/nvim-treesitter-textobjects')
-  use ('nvim-treesitter/playground')
+  },
+
+{
+"nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+},
+  {'nvim-treesitter/nvim-treesitter-textobjects'},
+{'nvim-treesitter/playground'},
+    --[[
   use ('ThePrimeagen/harpoon')
   use ('mbbill/undotree')
   use ('tpope/vim-fugitive')
@@ -58,8 +69,11 @@ use (
 		  -- Snippets
 		  {'L3MON4D3/LuaSnip'},
 		  {'rafamadriz/friendly-snippets'},
-	  }
-  }
-end)
+	  },
 
+
+
+},{})
+
+--]]
 
