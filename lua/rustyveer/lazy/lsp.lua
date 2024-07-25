@@ -58,6 +58,19 @@ return {
 						},
 					})
 				end,
+				["rust_analyzer"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.rust_analyzer.setup({
+						capabilities = capabilities,
+						settings = {
+							["rust-analyzer"] = {
+								checkOnSave = {
+									command = "clippy",
+								},
+							},
+						},
+					})
+				end,
 			},
 		})
 		mason_tool_installer.setup({
@@ -81,7 +94,7 @@ return {
 			mapping = cmp.mapping.preset.insert({
 				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
+				["<C-=>"] = cmp.mapping.confirm({ select = true }),
 				["<C-Space>"] = cmp.mapping.complete(),
 			}),
 			sources = cmp.config.sources({
