@@ -2,19 +2,16 @@ local M = {
 	"mfussenegger/nvim-dap",
 	event = "VeryLazy",
 	dependencies = {
-		{
-			"nvim-neotest/nvim-nio",
+		"nvim-neotest/nvim-nio",
 
-			"rcarriga/nvim-dap-ui",
-			"mfussenegger/nvim-dap-python",
-			"theHamsta/nvim-dap-virtual-text",
-			"nvim-telescope/telescope-dap.nvim",
-			"leoluz/nvim-dap-go",
-			"mxsdev/nvim-dap-vscode-js",
-
-			"williamboman/mason.nvim",
-			"williamboman/mason-nvim-dap.nvim",
-		},
+		"rcarriga/nvim-dap-ui",
+		"theHamsta/nvim-dap-virtual-text",
+		"nvim-telescope/telescope-dap.nvim",
+		"leoluz/nvim-dap-go",
+		"mfussenegger/nvim-dap-python",
+		"mxsdev/nvim-dap-vscode-js",
+		"williamboman/mason.nvim",
+		"williamboman/mason-nvim-dap.nvim",
 	},
 	config = function()
 		local dap = require("dap")
@@ -63,12 +60,13 @@ local M = {
 		-- Go Configuration
 		require("dap-go").setup()
 
-		-- C++ Configuration
 		dap.adapters.cppdbg = {
 			id = "cppdbg",
 			type = "executable",
-			command = "path/to/cpptools/extension/debugAdapters/bin/OpenDebugAD7", -- Adjust this path
+			command = "/Users/veerpratap/.vscode/extensions/ms-vscode.cpptools-1.20.5-darwin-arm64/debugAdapters/bin/OpenDebugAD7",
 		}
+
+		-- Debugger configurations
 		dap.configurations.cpp = {
 			{
 				name = "Launch file",
@@ -86,7 +84,7 @@ local M = {
 				request = "launch",
 				MIMode = "gdb",
 				miDebuggerServerAddress = "localhost:1234",
-				miDebuggerPath = "/usr/bin/gdb", -- Adjust as needed
+				miDebuggerPath = "/usr/bin/gdb",
 				cwd = "${workspaceFolder}",
 				program = function()
 					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
@@ -94,6 +92,9 @@ local M = {
 			},
 		}
 
+		-- Apply configurations for C and Rust
+		dap.configurations.c = dap.configurations.cpp
+		dap.configurations.rust = dap.configurations.cpp
 		-- Python Configuration
 		require("dap-python").setup("~/.virtualenvs/debugpy/bin/python") -- Adjust the path to debugpy as needed
 
@@ -125,173 +126,3 @@ local M = {
 }
 
 return M
-
--- return {
--- 	{
--- 		"mfussenegger/nvim-dap",
--- 		dependencies = {
--- 			"leoluz/nvim-dap-go",
--- 			"rcarriga/nvim-dap-ui",
--- 			"theHamsta/nvim-dap-virtual-text",
--- 			"nvim-neotest/nvim-nio",
--- 			"williamboman/mason.nvim",
--- 		},
--- 		config = function()
--- 			local dap = require("dap")
--- 			local ui = require("dapui")
--- 			require("dapui").setup({
--- 				icons = {
--- 					expanded = "▾",
--- 					collapsed = "▸",
--- 					current_frame = "▸",
--- 				},
--- 				mappings = {
--- 					-- Use a table to apply multiple mappings
--- 					expand = { "<CR>", "<2-LeftMouse>" },
--- 					open = "o",
--- 					remove = "d",
--- 					edit = "e",
--- 					repl = "r",
--- 					toggle = "t",
--- 				},
--- 				-- Expand lines larger than the window
--- 				-- Requires >= 0.7
--- 				expand_lines = vim.fn.has("nvim-0.7") == 1,
--- 				layouts = {
--- 					{
--- 						elements = {
--- 							-- Provide as ID strings or tables with "id" and "size" keys
--- 							{
--- 								id = "scopes",
--- 								size = 0.25, -- Can be float or integer > 1
--- 							},
--- 							{ id = "breakpoints", size = 0.25 },
--- 							{ id = "stacks", size = 0.25 },
--- 							{ id = "watches", size = 0.25 },
--- 						},
--- 						size = 40,
--- 						position = "left", -- Can be "left", "right", "top", "bottom"
--- 					},
--- 					{
--- 						elements = {
--- 							"repl",
--- 							"console",
--- 						},
--- 						size = 0.25,
--- 						position = "bottom", -- Can be "left", "right", "top", "bottom"
--- 					},
--- 				},
--- 				controls = {
--- 					-- Requires Neovim nightly (or 0.8 when released)
--- 					enabled = true,
--- 					-- Display controls in this element
--- 					element = "repl",
--- 					icons = {
--- 						pause = "",
--- 						play = "",
--- 						step_into = "",
--- 						step_over = "",
--- 						step_out = "",
--- 						step_back = "",
--- 						run_last = "↻",
--- 						terminate = "□",
--- 					},
--- 				},
--- 				floating = {
--- 					max_height = nil, -- These can be integers or a float between 0 and 1.
--- 					max_width = nil, -- Floats will be treated as percentage of your screen.
--- 					border = "single", -- Border style. Can be "single", "double" or "rounded"
--- 					mappings = {
--- 						close = { "q", "<Esc>" },
--- 					},
--- 				},
--- 				windows = { indent = 1 },
--- 				render = {
--- 					max_type_length = nil, -- Can be integer or nil.
--- 				},
--- 			})
---
--- 			require("dapui").setup()
--- 			require("dap-go").setup()
---
--- 			require("nvim-dap-virtual-text").setup({
--- 				-- This just tries to mitigate the chance that I leak tokens here. Probably won't stop it from happening...
--- 				-- display_callback = function(variable)
--- 				-- 	local name = string.lower(variable.name)
--- 				-- 	local value = string.lower(variable.value)
--- 				-- 	if name:match("secret") or name:match("api") or value:match("secret") or value:match("api") then
--- 				-- 		return "*****"
--- 				-- 	end
--- 				--
--- 				-- 	if #variable.value > 15 then
--- 				-- 		return " " .. string.sub(variable.value, 1, 15) .. "... "
--- 				-- 	end
--- 				--
--- 				-- 	return " " .. variable.value
--- 				-- end,
--- 			})
---
--- 			-- Handled by nvim-dap-go
--- 			-- dap.adapters.go = {
--- 			--   type = "server",
--- 			--   port = "${port}",
--- 			--   executable = {
--- 			--     command = "dlv",
--- 			--     args = { "dap", "-l", "127.0.0.1:${port}" },
--- 			--   },
--- 			-- }
---
--- 			local elixir_ls_debugger = vim.fn.exepath("elixir-ls-debugger")
--- 			if elixir_ls_debugger ~= "" then
--- 				dap.adapters.mix_task = {
--- 					type = "executable",
--- 					command = elixir_ls_debugger,
--- 				}
---
--- 				dap.configurations.elixir = {
--- 					{
--- 						type = "mix_task",
--- 						name = "phoenix server",
--- 						task = "phx.server",
--- 						request = "launch",
--- 						projectDir = "${workspaceFolder}",
--- 						exitAfterTaskReturns = false,
--- 						debugAutoInterpretAllModules = false,
--- 					},
--- 				}
--- 			end
---
--- 			vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
--- 			vim.keymap.set("n", "<leader>gb", dap.run_to_cursor)
---
--- 			-- Eval var under cursor
--- 			vim.keymap.set("n", "<leader>?", function()
--- 				require("dapui").eval(nil, { enter = true })
--- 			end)
---
--- 			vim.keymap.set("n", "<leader>dc", dap.continue)
--- 			vim.keymap.set("n", "<F2>", dap.step_into)
--- 			vim.keymap.set("n", "<F3>", dap.step_over)
--- 			vim.keymap.set("n", "<F4>", dap.step_out)
--- 			vim.keymap.set("n", "<F5>", dap.step_back)
--- 			vim.keymap.set("n", "<F13>", dap.restart)
---
--- 			vim.keymap.set("n", "<leader>dm", function()
--- 				require("dapui").toggle()
--- 			end)
---
--- 			dap.listeners.before.attach.dapui_config = function()
--- 				ui.open()
--- 			end
--- 			dap.listeners.before.launch.dapui_config = function()
--- 				ui.open()
--- 			end
--- 			dap.listeners.before.event_terminated.dapui_config = function()
--- 				ui.close()
--- 			end
--- 			dap.listeners.before.event_exited.dapui_config = function()
--- 				ui.close()
--- 			end
--- 		end,
--- 	},
--- }
