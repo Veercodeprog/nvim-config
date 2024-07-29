@@ -26,7 +26,7 @@ Here are some of the key aspects of this Neovim configuration:
 
 ### 1. Plugins
 
-This configuration utilizes several plugins to enhance functionality, including:
+This configuration utilizes several plugins to enhance functionality, including:(using packer)
 
 - **[Plugin Name](https://link.to/plugin/docs):** A brief description of the plugin and why it's included.
 
