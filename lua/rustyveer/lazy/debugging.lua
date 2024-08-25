@@ -63,7 +63,10 @@ local M = {
 		dap.adapters.cppdbg = {
 			id = "cppdbg",
 			type = "executable",
-			command = "/Users/veerpratap/.vscode/extensions/ms-vscode.cpptools-1.20.5-darwin-arm64/debugAdapters/bin/OpenDebugAD7",
+			command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7",
+			options = {
+				detached = false,
+			},
 		}
 
 		-- Debugger configurations
@@ -73,22 +76,28 @@ local M = {
 				type = "cppdbg",
 				request = "launch",
 				program = function()
-					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+					return vim.fn.input("", vim.fn.getcwd() .. "/", "file")
 				end,
 				cwd = "${workspaceFolder}",
 				stopAtEntry = true,
 			},
 			{
-				name = "Attach to gdbserver :1234",
+				name = "Debug Program",
 				type = "cppdbg",
 				request = "launch",
-				MIMode = "gdb",
-				miDebuggerServerAddress = "localhost:1234",
-				miDebuggerPath = "/usr/bin/gdb",
-				cwd = "${workspaceFolder}",
 				program = function()
 					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 				end,
+				cwd = "${workspaceFolder}",
+				stopAtEntry = true,
+				MIMode = "lldb",
+				setupCommands = {
+					{
+						description = "Enable pretty-printing for lldb",
+						text = "-enable-pretty-printing",
+						ignoreFailures = true,
+					},
+				},
 			},
 		}
 
@@ -96,6 +105,7 @@ local M = {
 		dap.configurations.c = dap.configurations.cpp
 		dap.configurations.rust = dap.configurations.cpp
 		-- Python Configuration
+
 		require("dap-python").setup("~/.virtualenvs/debugpy/bin/python") -- Adjust the path to debugpy as needed
 
 		-- JavaScript/TypeScript/Node.js Configuration

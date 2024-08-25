@@ -2,6 +2,15 @@ require("rustyveer.set")
 
 require("rustyveer.remap")
 require("rustyveer.lazy_init")
+-- Set PATH for Neovim
+vim.env.PATH = vim.env.PATH .. ":/opt/homebrew/bin:/usr/local/bin"
+-- vim.cmd('!alias g++="g++ -std=c++20"')
+vim.cmd("let $SHELL = '/bin/zsh'") -- or /bin/bash depending on your shell
+vim.cmd("let $GPP = 'g++ -std=c++20'")
+vim.env.SHELL = "/bin/zsh" -- or /bin/bash if that's your shell
+
+-- Make sure Neovim sources your shell profile
+-- vim.cmd([[source ~/.zshrc]]) -- or ~/.bashrc if you use bash
 
 -- DO.not
 -- DO NOT INCLUDE THIS

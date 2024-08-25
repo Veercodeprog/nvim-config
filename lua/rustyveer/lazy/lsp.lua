@@ -61,11 +61,21 @@ return {
 				["rust_analyzer"] = function()
 					local lspconfig = require("lspconfig")
 					lspconfig.rust_analyzer.setup({
-						capabilities = capabilities,
+						-- Server-specific settings. See `:help lspconfig-setup`
 						settings = {
 							["rust-analyzer"] = {
-								checkOnSave = {
-									command = "clippy",
+								cargo = {
+									allFeatures = true,
+								},
+								imports = {
+									group = {
+										enable = false,
+									},
+								},
+								completion = {
+									postfix = {
+										enable = false,
+									},
 								},
 							},
 						},
@@ -94,7 +104,7 @@ return {
 			mapping = cmp.mapping.preset.insert({
 				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-=>"] = cmp.mapping.confirm({ select = true }),
+				["<C-.>"] = cmp.mapping.confirm({ select = true }),
 				["<C-Space>"] = cmp.mapping.complete(),
 			}),
 			sources = cmp.config.sources({
