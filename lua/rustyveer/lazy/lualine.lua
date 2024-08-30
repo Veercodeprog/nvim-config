@@ -55,6 +55,14 @@ return {
 				theme = my_lualine_theme,
 			},
 			sections = {
+				lualine_a = { "mode" },
+				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_c = {
+					{
+						"filename",
+						path = 1, -- '1' to show the full path
+					},
+				},
 				lualine_x = {
 					{
 						lazy_status.updates,
@@ -65,7 +73,18 @@ return {
 					{ "fileformat" },
 					{ "filetype" },
 				},
+				lualine_y = { "progress" },
+				lualine_z = { "location" },
 			},
+			inactive_sections = {
+				lualine_a = {},
+				lualine_b = {},
+				lualine_c = { "filename" },
+				lualine_x = { "location" },
+				lualine_y = {},
+				lualine_z = {},
+			},
+			extensions = {},
 		})
 	end,
 }

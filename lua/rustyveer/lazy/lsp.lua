@@ -79,17 +79,44 @@ return {
 								},
 							},
 						},
+						on_attach = function(client, bufnr)
+							-- Enable autoformat on save using rustfmt
+							if client.server_capabilities.documentFormattingProvider then
+								vim.api.nvim_create_autocmd("BufWritePre", {
+									buffer = bufnr,
+									callback = function()
+										vim.lsp.buf.format({ async = false })
+									end,
+								})
+							end
+						end,
+					})
+				end,
+
+				["tailwindcss"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.tailwindcss.setup({
+						capabilities = capabilities,
+						settings = {
+							tailwindCSS = {
+								emmet = {
+									enabled = true,
+								},
+							},
+						},
 					})
 				end,
 			},
 		})
+
+		-- Add the mason_tool_installer.setup here
 		mason_tool_installer.setup({
 			ensure_installed = {
 				"stylua",
 				"prettier",
 				"eslint",
 				"eslint_d",
-				"eslint_d",
+				"rustywind", -- Add rustywind here
 			},
 		})
 

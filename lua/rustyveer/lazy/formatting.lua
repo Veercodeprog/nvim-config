@@ -20,7 +20,7 @@ return {
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
-				rust = { "rustfmt" }, -- Add rustfmt for Rust files
+				rust = { "rustywind", "rustfmt" }, -- Use rustywind and rustfmt for Rust
 			},
 			format_on_save = {
 				lsp_fallback = true,
