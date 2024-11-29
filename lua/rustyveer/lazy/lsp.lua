@@ -77,6 +77,9 @@ return {
 										enable = false,
 									},
 								},
+								checkOnSave = {
+									command = "clippy", -- Use clippy for on-save checks
+								},
 							},
 						},
 						on_attach = function(client, bufnr)
